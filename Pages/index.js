@@ -90,9 +90,7 @@ function PaginaInicial() {
             margin={'16px'}
             boxShadow={'0 2px 10px 0 rgb(0 0 0 / 20%)'}
             backgroundColor={appConfig.theme.colors.neutrals[700]}
-            flexDirection= {{
-                
-            }}
+
           >
             {/* Formulário */}
             <Box
