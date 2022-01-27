@@ -1,7 +1,7 @@
 {
   "name": "AluraCord",
   "version": "1.0.0",
-  "main": "__app.js",
+  "main": "index.js",
   "license": "MIT",
   "dependencies": {
     "@chakra-ui/react": "^1.8.0",

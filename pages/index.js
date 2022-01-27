@@ -1,38 +1,12 @@
 import appConfig from '../config.json'
-import { ChakraProvider, CSSReset, extendTheme } from '@chakra-ui/react'
-import {Box, Button, Text, Input, Image} from '@chakra-ui/react'
+import { ChakraProvider, CSSReset, extendTheme, FormControl } from '@chakra-ui/react'
+import {Box, Button, Text, Input, Image, Form} from '@chakra-ui/react'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 const  theme = extendTheme(appConfig.theme.colors)
 
-function GlobalStyle() {
-    return (
-        <style global jsx>{`
-        * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        list-style: none;
-      }
-      body {
-        font-family: 'Open Sans', sans-serif;
-      }
-      /* App fit Height */ 
-      html, body, #__next {
-        min-height: 100vh;
-        display: flex;
-        flex: 1;
-      }
-      #__next {
-        flex: 1;
-      }
-      #__next > * {
-        flex: 1;
-      }
-      /* ./App fit Height */ 
-            `}
-        </style>
-    )
-}
+
 
 function Titulo(props) {
     const Tag = props.tag || 'h1';
@@ -63,12 +37,12 @@ function Titulo(props) {
   // }
   // export default HomePage
   
-function PaginaInicial() {
-    const username = 'Guilhermesou';
+export default function PaginaInicial() {
+    const [username, setUsername] = useState('Guilhermesou');
   
+    const router = useRouter()
     return (
       <>
-        <GlobalStyle />
         <Box 
         display={'flex'}
         alignItems={'center'}
@@ -95,6 +69,10 @@ function PaginaInicial() {
             {/* Formulário */}
             <Box
               as="form"
+              onSubmit={(event) => {
+                event.preventDefault()
+                router.push('/chat');
+              }}
               display={'flex'} 
               flexDirection={'column'}
               alignItems={'center'} 
@@ -116,6 +94,11 @@ function PaginaInicial() {
                 textColor={appConfig.theme.colors.neutrals[200]}
                 backgroundColor={appConfig.theme.colors.neutrals[800]}
                 borderColor={appConfig.theme.colors.neutrals[800]}
+                value={username}
+                onChange={function (event) {
+                  const valor = event.target.value;
+                  setUsername(valor);
+                }}
                 textStyle={{
                     neutral: {
                       mainColor: appConfig.theme.colors.neutrals[900],
@@ -176,13 +159,3 @@ function PaginaInicial() {
     );
   }
 
-
-//Envolve o Provider do ChakraUI na aplicação
- export default function App() {
-    return (
-      <ChakraProvider theme={theme}>
-          <CSSReset/>
-        <PaginaInicial/>
-      </ChakraProvider>
-    )
-  }
