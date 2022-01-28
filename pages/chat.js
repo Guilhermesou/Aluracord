@@ -30,6 +30,12 @@ export default function Chat() {
         setMensagem('');
     }
 
+    function handleDeleteMessage(messageIdToDelete) {
+        setmessages(messages.filter((msg) => msg.id !== messageIdToDelete))
+
+
+    }
+
     return (
         <Box
             display={'flex'}
@@ -68,7 +74,7 @@ export default function Chat() {
                     padding={'16px'}
                 >
 
-                    <MessageList messagesData={messages} />
+                    <MessageList messagesData={messages} deleteFunction={handleDeleteMessage}/>
 
                     <Box
                         as="form"
@@ -136,7 +142,8 @@ function Header() {
 }
 
 function MessageList(props) {
-    console.log('MessageList', props.messagesData);
+    
+    
     return (
         <Box tag="ul"
             overflow={'auto'}
@@ -183,7 +190,9 @@ function MessageList(props) {
                             >
                                 {(new Date().toLocaleDateString())}
                             </Text>
-                            <IconButton left={'67%'} colorScheme={'white'} icon={<MdOutlineDelete/>}/>
+                            <IconButton left={'67%'} colorScheme={'white'} icon={<MdOutlineDelete/>} onClick={() => {
+                                props.deleteFunction(message.id)
+                            }}/>
                         </Box>
                         {message.text}
                         
