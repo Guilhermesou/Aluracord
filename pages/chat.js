@@ -36,7 +36,7 @@ export default function Chat() {
     [ ] Aprimorar Design e Responsividade
     [ ] Colocar foto de usuário no header
     [ ] Diminuir tamanho do stickers na lista de msg
-    
+    [ ] Colocar ação no botão de Logout
     */
     const [mensagem, setMensagem] = useState('');
     const [messages, setmessages] = useState([
@@ -207,7 +207,11 @@ function Header() {
                 <Text textColor={appConfig.theme.colors.neutrals['000']}>
                     Chat
                 </Text>
-                <Button leftIcon={<MdLogout />} href="/">
+                <Button leftIcon={<MdLogout />} onClick={
+                    (event) => {
+                        event.preventDefault()
+                        router.push(`/chat?username=${username}`)
+                }}>
                     Logout
                 </Button>
 
