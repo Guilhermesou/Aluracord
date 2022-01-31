@@ -1,4 +1,4 @@
-import { Box, Button, Input, Text, Image, IconButton, SkeletonCircle, SkeletonText, Tooltip, Avatar, Heading } from "@chakra-ui/react";
+import { Box, Button, Input, Text, Image, IconButton, SkeletonCircle, SkeletonText, Tooltip, Avatar, Heading, OrderedList } from "@chakra-ui/react";
 import { MdLogout, MdSend, MdOutlineDelete } from 'react-icons/md'
 import { useEffect, useState } from "react";
 import appConfig from '../config.json'
@@ -14,7 +14,7 @@ const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 function listenMessages(addNewMessage) {
     return supabaseClient
         .from('messages')
-        .on('INSERT', (response) => {
+        .on('INSERT' || 'DELETE', (response) => {
             addNewMessage(response.new);
         })
         .subscribe();
@@ -23,31 +23,21 @@ function listenMessages(addNewMessage) {
 export default function Chat() {
 
 
-    /*
-        --------------| Desafio Aula 3|-------------
-
-        [X] Colocar um botão de enviar
-        [X] Colocar um botão de deletar mensagem(Usar método filter)
+    
+    /* 
+        ------------|TODO|-------------- 
+    
+    
+    [X] Desabilitar botão enviar caso input tenha 0 caracteres
+    [X] Desabilitar envio de mensagem em branco
+    [ ] Colcoar botão de apagar no lado
+    [ ] Atualizar msgs quando deletar uma mensagem
+    [ ] Colocar Quiz
+    [ ] Aprimorar Design e Responsividade
+    [ ] Colocar foto de usuário no header
+    [ ] Diminuir tamanho do stickers na lista de msg
     
     */
-    /*
-        --------------| Desafio Aula 4|-------------
-
-        [X] Colocar loading (skelleton de preferencia)
-        [ ] Colocar mouse hover na imagem de perfil do usuário (Rosto maior, link github, quantos repositórios)
-
-    */
-
-    /*
-        --------------| Desafio Aula 5|-------------
-
-        [ ] Poderia Colocar um botão de enquete, quiz.... **
-        
-
-    */
-
-    //Todo = [Desabilitar botão enviar caso input tenha 0 caracteres ]
-
     const [mensagem, setMensagem] = useState('');
     const [messages, setmessages] = useState([
         //{
@@ -68,6 +58,7 @@ export default function Chat() {
             supabaseClient
                 .from('messages')
                 .select('*')
+                .order('id', {ascending: false})
                 .then(({ data }) => {
                     setmessages(data)
                     setIsLoading(false)
@@ -114,11 +105,9 @@ export default function Chat() {
             alignItems={'center'}
             justifyContent={'center'}
             backgroundColor={'#1A1A1A'}
-            backgroundImage={`url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)`}
             backgroundRepeat={'no-repeat'}
             backgroundSize={'cover'}
             backgroundBlendMode={'multiply'}
-
         >
             <Box
                 display={'flex'}
@@ -133,7 +122,8 @@ export default function Chat() {
                 padding={'32px'}
 
             >
-                <Header />
+                
+                <Header usuarioLogado={usuarioLogado}/>
                 <Box
                     position={'relative'}
                     display={'flex'}
@@ -156,8 +146,9 @@ export default function Chat() {
                         <Input
                             value={mensagem}
                             onKeyPress={(event) => {
-                                if (event.key === 'Enter') {
-                                    event.preventDefault();
+                                event.preventDefault();
+                                if (event.key === 'Enter' && event.target.value.length > 0) {
+                                    
                                     handleNewMessage(mensagem)
                                 }
                             }}
@@ -251,19 +242,21 @@ function MessageList(props) {
                 alignItems={'center'}
             >
 
-                <Text
+                <Box
                     fontSize={'2xl'}
                     position={'relative'}
 
                     textColor={'#9AA5B1'}
                     textAlign={'center'}
-
+                    _hover={{
+                        background: appConfig.theme.colors.neutrals[200],
+                    }}
                 >
                     <Text fontSize={'8xl'}>
                         😕
                     </Text>
                     Parece que não tem nenhuma mensagem
-                </Text>
+                </Box>
             </Box>
         )
     }
@@ -330,14 +323,14 @@ function MessageList(props) {
                                 textColor={appConfig.theme.colors.neutrals[300]}
                                 tag={"span"}
                             >
-                                {(new Date().toLocaleDateString())}
+                                {message.created_at}
                             </Text>
                             <IconButton position={'relative'} right={'0'} colorScheme={'white'} icon={<MdOutlineDelete />} onClick={() => {
                                 props.deleteFunction(message.id)
                             }} />
                         </Box>
                         {message.text.startsWith(':sticker:') ?
-                            <Image maxW={'md'} src={message.text.replace(':sticker:', '')} />
+                            <Image maxW={'110px'} src={message.text.replace(':sticker:', '')} />
                             :
                             message.text
                         }
@@ -377,7 +370,7 @@ function Profile(props) {
     }
     return (
 
-        <Box p={'10px'}>
+        <Box p={'10px'} bg={'blackAlpha.900'}>
             <Avatar src={profileData.avatar_url} />
             <Heading>{profileData.login}</Heading>
             <Text>Repositórios: {profileData.public_repos}</Text>
