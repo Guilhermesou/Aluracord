@@ -67,7 +67,7 @@ export default function PaginaInicial() {
             as="form"
             onSubmit={(event) => {
               event.preventDefault()
-              router.push('/chat');
+              router.push(`/chat?username=${username}`);
             }}
             display={'flex'}
             flexDirection={'column'}
@@ -100,6 +100,7 @@ export default function PaginaInicial() {
                 setUsername(valor);
                 
               }}
+              
               
             />
 

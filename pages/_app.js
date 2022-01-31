@@ -35,7 +35,6 @@ function GlobalStyle() {
 
 
 export default function MyApp({ Component, pageProps }) {
-    console.log("Carregador")
     return (
         <ChakraProvider theme={theme}>
             <CSSReset />
