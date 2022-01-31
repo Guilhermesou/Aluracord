@@ -3,6 +3,20 @@ import { ChakraProvider, CSSReset, extendTheme } from '@chakra-ui/react'
 import appConfig from '../config.json'
 const  theme = extendTheme(appConfig.theme.colors)
 
+
+//Sign IN Session implementation
+import { supabase } from '@supabase/supabase-js'
+
+
+
+
+
+
+
+
+
+
+
 function GlobalStyle() {
     return (
         <style global jsx>{`
