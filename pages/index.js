@@ -34,7 +34,7 @@ function Titulo(props) {
 
 
 export default function PaginaInicial() {
-  const [username, setUsername] = useState('Guilhermesou');
+  const [username, setUsername] = useState('');
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
   const router = useRouter()
   return (
