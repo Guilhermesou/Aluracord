@@ -5,7 +5,7 @@ import appConfig from '../config.json'
 import { createClient } from "@supabase/supabase-js";
 import 'react-loading-skeleton'
 import { useRouter } from "next/router";
-import { ButtonSendSticker } from "../src/components/buttonSendSticker";
+import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzM5MjI5MCwiZXhwIjoxOTU4OTY4MjkwfQ.qxUg6wh4zCx2eJZqnxnQsr9S2QxR_usBmee-l8hH-EA'
 const SUPABASE_URL = 'https://trjwjshcnqalajssbxko.supabase.co';
