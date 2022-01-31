@@ -1,8 +1,20 @@
 import appConfig from '../config.json'
-import { Alert, AlertDescription, AlertIcon, AlertTitle, CloseButton } from '@chakra-ui/react'
-import { Box, Button, Text, Input, Image } from '@chakra-ui/react'
+import { Box, Button, Text, Input, Avatar } from '@chakra-ui/react'
+import { MdLogin } from 'react-icons/md'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+
+
+ /* 
+        ------------|TODO|-------------- 
+    [ ] Colocar verificação se o usuário existe no github
+    [ ] Mudar cor padrão para azul?
+*/
+
+
+
+
+
 
 function Titulo(props) {
   const Tag = props.tag || 'h1';
@@ -20,18 +32,6 @@ function Titulo(props) {
   );
 }
 
-// Componente React
-// function HomePage() {
-//     // JSX
-//     return (
-//         <div>
-//             <GlobalStyle />
-//             <Titulo tag="h2">Boas vindas de volta!</Titulo>
-//             <h2>Discord - Alura Matrix</h2>
-//         </div>
-//     )
-// }
-// export default HomePage
 
 export default function PaginaInicial() {
   const [username, setUsername] = useState('Guilhermesou');
@@ -110,6 +110,7 @@ export default function PaginaInicial() {
               type='submit'
               isDisabled={isButtonDisabled}
               isFullWidth
+              rightIcon={<MdLogin/>}
               buttonColors={{
                 contrastColor: appConfig.theme.colors.neutrals["000"],
                 mainColor: appConfig.theme.colors.primary[500],
@@ -136,7 +137,8 @@ export default function PaginaInicial() {
             flex={1}
             minHeight={'240px'}
           >
-            <Image
+            <Avatar
+              size={'3xl'}
               borderRadius={'50%'}
               marginBottom={'16px'}
               src={`https://github.com/${username}.png`}

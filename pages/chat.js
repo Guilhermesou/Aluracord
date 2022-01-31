@@ -23,20 +23,20 @@ function listenMessages(addNewMessage) {
 export default function Chat() {
 
 
-    
+
     /* 
         ------------|TODO|-------------- 
     
     
     [X] Desabilitar botão enviar caso input tenha 0 caracteres
     [X] Desabilitar envio de mensagem em branco
-    [ ] Colcoar botão de apagar no lado
+    [ ] Colocar botão de apagar no lado
     [ ] Atualizar msgs quando deletar uma mensagem
     [ ] Colocar Quiz
     [ ] Aprimorar Design e Responsividade
     [ ] Colocar foto de usuário no header
-    [ ] Diminuir tamanho do stickers na lista de msg
-    [ ] Colocar ação no botão de Logout
+    [X] Diminuir tamanho do stickers na lista de msg
+    [X] Colocar ação no botão de Logout
     */
     const [mensagem, setMensagem] = useState('');
     const [messages, setmessages] = useState([
@@ -58,7 +58,7 @@ export default function Chat() {
             supabaseClient
                 .from('messages')
                 .select('*')
-                .order('id', {ascending: false})
+                .order('id', { ascending: false })
                 .then(({ data }) => {
                     setmessages(data)
                     setIsLoading(false)
@@ -88,7 +88,7 @@ export default function Chat() {
         supabaseClient
             .from('messages')
             .insert([message])
-            .then(() => {})
+            .then(() => { })
         setMensagem('');
     }
 
@@ -122,8 +122,8 @@ export default function Chat() {
                 padding={'32px'}
 
             >
-                
-                <Header usuarioLogado={usuarioLogado}/>
+
+                <Header usuarioLogado={usuarioLogado} router={router} />
                 <Box
                     position={'relative'}
                     display={'flex'}
@@ -136,7 +136,7 @@ export default function Chat() {
                     padding={'16px'}
                 >
 
-                    <MessageList messagesData={messages} deleteFunction={handleDeleteMessage} loaded={isLoading} />
+                    <MessageList messagesData={messages} deleteFunction={handleDeleteMessage} loaded={isLoading} user={usuarioLogado}/>
 
                     <Box
                         as="form"
@@ -148,7 +148,7 @@ export default function Chat() {
                             onKeyPress={(event) => {
                                 event.preventDefault();
                                 if (event.key === 'Enter' && event.target.value.length > 0) {
-                                    
+
                                     handleNewMessage(mensagem)
                                 }
                             }}
@@ -193,7 +193,8 @@ export default function Chat() {
 }
 
 
-function Header() {
+function Header(props) {
+
     return (
         <>
             <Box
@@ -204,14 +205,15 @@ function Header() {
                 justifyContent={'space-between'}
 
             >
+                <Avatar src={`https://github.com/${props.usuarioLogado}.png`} />
                 <Text textColor={appConfig.theme.colors.neutrals['000']}>
                     Chat
                 </Text>
                 <Button leftIcon={<MdLogout />} onClick={
                     (event) => {
                         event.preventDefault()
-                        router.push(`/chat?username=${username}`)
-                }}>
+                        props.router.push(`/`)
+                    }}>
                     Logout
                 </Button>
 
@@ -275,16 +277,16 @@ function MessageList(props) {
             textColor={appConfig.theme.colors.neutrals["000"]}
             css={{
                 '&::-webkit-scrollbar': {
-                  width: '4px',
+                    width: '4px',
                 },
                 '&::-webkit-scrollbar-track': {
-                  width: '6px',
+                    width: '6px',
                 },
                 '&::-webkit-scrollbar-thumb': {
-                  background: '#0A0A0A',
-                  borderRadius: '24px',
+                    background: '#0A0A0A',
+                    borderRadius: '24px',
                 },
-              }}
+            }}
 
         >
 
@@ -297,7 +299,9 @@ function MessageList(props) {
                         tag={'li'}
                         padding={'6px'}
                         marginBottom={'12px'}
-
+                        _hover={{
+                            background: appConfig.theme.colors.neutrals[800],
+                        }}
                     >
 
                         <Box
@@ -307,7 +311,7 @@ function MessageList(props) {
                             flexDirection={'row'}
                             alignItems={'flex-end'}
                         >
-                            <Tooltip label={<Profile username={message.from} />} placement="right">
+                            <Tooltip bg={'blackAlpha.900'} borderRadius={'xl'} label={<Profile username={message.from} />} placement="right">
                                 <Image
                                     width={'45px'}
                                     height={'45px'}
@@ -329,17 +333,18 @@ function MessageList(props) {
                             >
                                 {message.created_at}
                             </Text>
-                            <IconButton position={'relative'} right={'0'} colorScheme={'white'} icon={<MdOutlineDelete />} onClick={() => {
-                                props.deleteFunction(message.id)
-                            }} />
+
                         </Box>
                         {message.text.startsWith(':sticker:') ?
                             <Image maxW={'110px'} src={message.text.replace(':sticker:', '')} />
                             :
                             message.text
                         }
-
-
+                        {message.from === props.user && 
+                        <IconButton pqdding={0} position={'relative'} float={'right'} colorScheme={'white'} icon={<MdOutlineDelete />} onClick={() => {
+                            props.deleteFunction(message.id)
+                        }} />}
+                        
                     </Text>
                 )
             })
@@ -374,8 +379,8 @@ function Profile(props) {
     }
     return (
 
-        <Box p={'10px'} bg={'blackAlpha.900'}>
-            <Avatar src={profileData.avatar_url} />
+        <Box p={'10px'} >
+            <Avatar size={2} src={profileData.avatar_url} />
             <Heading>{profileData.login}</Heading>
             <Text>Repositórios: {profileData.public_repos}</Text>
             <Text>Seguidores: {profileData.followers}</Text>
